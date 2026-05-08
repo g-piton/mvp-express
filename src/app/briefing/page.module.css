@@ -1,0 +1,89 @@
+.page {
+  display: grid;
+  gap: 2rem;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.55fr);
+  gap: 1rem;
+}
+
+.header > div,
+.sidebar,
+.formShell {
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  background: rgba(16, 25, 44, 0.74);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(16px);
+}
+
+.header > div {
+  padding: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+.header span {
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.header h1 {
+  margin: 1rem 0;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1;
+}
+
+.header p,
+.sidebar li {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.sidebar {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  padding: 1.5rem;
+}
+
+.profileBadge {
+  display: inline-grid;
+  gap: 0.25rem;
+  margin-top: 1.3rem;
+  border: 1px solid rgba(57, 208, 255, 0.18);
+  border-radius: 1rem;
+  background: rgba(57, 208, 255, 0.08);
+  padding: 0.9rem 1rem;
+}
+
+.profileBadge span {
+  color: var(--muted);
+}
+
+.sidebar ul {
+  display: grid;
+  gap: 0.8rem;
+  padding-left: 1.1rem;
+}
+
+.sidebar a {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.formShell {
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+@media (max-width: 920px) {
+  .header {
+    grid-template-columns: 1fr;
+  }
+}

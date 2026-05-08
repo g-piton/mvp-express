@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  ANALYST
+  SALES
+}
+
+enum LeadStatus {
+  RECEIVED
+  IN_REVIEW
+  WAITING_FOR_CLIENT
+  READY_FOR_PROPOSAL
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+enum LeadPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ProposalStatus {
+  DRAFT
+  SENT
+  WON
+  LOST
+}
+
+model User {
+  id            String              @id @default(cuid())
+  name          String
+  email         String              @unique
+  passwordHash  String?
+  role          UserRole            @default(ANALYST)
+  active        Boolean             @default(true)
+  assignedLeads Lead[]              @relation("LeadAssignee")
+  notes         LeadNote[]
+  statusChanges LeadStatusHistory[]
+  proposals     Proposal[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+model Company {
+  id        String    @id @default(cuid())
+  legalName String
+  tradeName String?
+  website   String?
+  segment   String?
+  teamSize  String?
+  contacts  Contact[]
+  leads     Lead[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Contact {
+  id        String     @id @default(cuid())
+  companyId String
+  company   Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  phone     String?
+  jobTitle  String?
+  isPrimary Boolean    @default(false)
+  leads     Lead[]     @relation("LeadPrimaryContact")
+  briefings Briefing[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Lead {
+  id                  String              @id @default(cuid())
+  companyId           String
+  company             Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  primaryContactId    String
+  primaryContact      Contact             @relation("LeadPrimaryContact", fields: [primaryContactId], references: [id], onDelete: Restrict)
+  assignedToUserId    String?
+  assignedTo          User?               @relation("LeadAssignee", fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  source              String?             @default("website")
+  status              LeadStatus          @default(RECEIVED)
+  priority            LeadPriority        @default(MEDIUM)
+  summary             String
+  mvpGoal             String
+  budgetRange         String?
+  deadlineExpectation String?
+  needsNda            Boolean             @default(false)
+  consentGiven        Boolean             @default(false)
+  notes               LeadNote[]
+  briefings           Briefing[]
+  statusHistory       LeadStatusHistory[]
+  proposals           Proposal[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+}
+
+model Briefing {
+  id                  String   @id @default(cuid())
+  leadId              String
+  lead                Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  uploadedByContactId String?
+  uploadedByContact   Contact? @relation(fields: [uploadedByContactId], references: [id], onDelete: SetNull)
+  version             Int      @default(1)
+  originalFilename    String
+  storageKey          String
+  mimeType            String
+  sizeBytes           Int
+  checksum            String?
+  createdAt           DateTime @default(now())
+}
+
+model LeadNote {
+  id           String   @id @default(cuid())
+  leadId       String
+  lead         Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  authorUserId String
+  author       User     @relation(fields: [authorUserId], references: [id], onDelete: Restrict)
+  content      String
+  createdAt    DateTime @default(now())
+}
+
+model LeadStatusHistory {
+  id              String      @id @default(cuid())
+  leadId          String
+  lead            Lead        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  changedByUserId String
+  changedBy       User        @relation(fields: [changedByUserId], references: [id], onDelete: Restrict)
+  fromStatus      LeadStatus?
+  toStatus        LeadStatus
+  reason          String?
+  createdAt       DateTime    @default(now())
+}
+
+model Proposal {
+  id            String         @id @default(cuid())
+  leadId        String
+  lead          Lead           @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  ownerUserId   String
+  owner         User           @relation(fields: [ownerUserId], references: [id], onDelete: Restrict)
+  scopeSummary  String
+  priceRange    String?
+  estimatedTime String?
+  sentAt        DateTime?
+  status        ProposalStatus @default(DRAFT)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}

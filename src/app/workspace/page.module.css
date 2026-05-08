@@ -1,0 +1,132 @@
+.page {
+  display: grid;
+  gap: 1.5rem;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.header,
+.card,
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  background: rgba(16, 25, 44, 0.78);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(16px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.header span {
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.header h1 {
+  margin: 0.8rem 0;
+  font-size: clamp(2.1rem, 4vw, 3.3rem);
+  line-height: 1;
+  max-width: 13ch;
+}
+
+.header p,
+.card p,
+.timelineItem p,
+.timelineItem span {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.linkButton {
+  border: 1px solid rgba(57, 208, 255, 0.2);
+  border-radius: 999px;
+  padding: 0.8rem 1.1rem;
+  background: rgba(57, 208, 255, 0.07);
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.25rem;
+}
+
+.card span {
+  color: var(--muted);
+}
+
+.card strong {
+  font-size: 1.8rem;
+}
+
+.columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.panel {
+  padding: 1.4rem;
+}
+
+.panel h2 {
+  margin-bottom: 1rem;
+}
+
+.panel ul {
+  display: grid;
+  gap: 0.8rem;
+  padding-left: 1.1rem;
+  color: var(--foreground);
+}
+
+.timeline {
+  display: grid;
+  gap: 1rem;
+}
+
+.timelineItem {
+  display: grid;
+  gap: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+@media (max-width: 940px) {
+  .header,
+  .columns {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,138 @@
+.form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 0.55rem;
+  color: var(--foreground);
+}
+
+.field span {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: rgba(7, 16, 30, 0.6);
+  color: var(--foreground);
+  padding: 1rem 1.1rem;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: rgba(57, 208, 255, 0.7);
+  box-shadow: 0 0 0 4px rgba(57, 208, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field small,
+.errorInline {
+  color: #ff97a5;
+  font-size: 0.8rem;
+}
+
+.upload {
+  display: grid;
+  gap: 0.4rem;
+  border: 1px dashed rgba(110, 247, 200, 0.4);
+  border-radius: 1rem;
+  background: rgba(10, 19, 36, 0.9);
+  padding: 1.2rem;
+  color: var(--muted);
+}
+
+.upload input {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.upload span {
+  color: var(--foreground);
+}
+
+.checks {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.checkbox {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  color: var(--muted);
+}
+
+.checkbox input {
+  margin-top: 0.15rem;
+}
+
+.footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+}
+
+.footer p {
+  max-width: 32rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.footer button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.95rem 1.5rem;
+  color: #07101e;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  font-weight: 800;
+  box-shadow: 0 20px 40px rgba(57, 208, 255, 0.22);
+}
+
+.success {
+  border: 1px solid rgba(110, 247, 200, 0.3);
+  border-radius: 1rem;
+  background: rgba(110, 247, 200, 0.08);
+  padding: 1rem 1.2rem;
+  color: #c7fce9;
+}
+
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .footer button {
+    width: 100%;
+  }
+}
