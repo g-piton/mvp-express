@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { LoginForm } from "@/components/login-form";
 import { QuickIntakeForm } from "@/components/quick-intake-form";
 import { redirectIfAuthenticated } from "@/modules/auth/session";
 
@@ -10,13 +9,12 @@ const navItems = [
   { href: "#inicio", label: "Inicio" },
   { href: "#solucoes", label: "Solucoes" },
   { href: "#como-funciona", label: "Como funciona" },
-  { href: "#acesso", label: "Acesso" },
 ];
 
 const benefits = [
-  "A empresa pode enviar apenas os dados basicos e nosso time assume o contato inicial.",
-  "Tambem oferecemos uma trilha para quem ja tem material e quer acelerar a primeira abordagem.",
-  "Avaliamos a viabilidade do produto com mais clareza, contexto e foco em proposta.",
+  "Recebemos desde um cadastro basico ate um briefing completo, sem travar o inicio da conversa.",
+  "Organizamos melhor a avaliacao para chegar no primeiro contato com muito mais clareza de cenario.",
+  "Damos mais previsibilidade para transformar uma ideia em proposta, escopo inicial e proximos passos.",
 ];
 
 const processSteps = [
@@ -81,10 +79,10 @@ export default async function Home() {
         </nav>
 
         <div className={styles.topbarActions}>
-          <Link className={styles.linkAction} href="#acesso">
+          <Link className={styles.linkAction} href="/criar-conta">
             Criar conta
           </Link>
-          <Link className={styles.primaryMiniAction} href="#acesso">
+          <Link className={styles.primaryMiniAction} href="/entrar">
             Entrar
           </Link>
         </div>
@@ -93,20 +91,13 @@ export default async function Home() {
       <section className={styles.hero} id="inicio">
         <div className={styles.heroContent}>
           <div className={styles.kicker}>4DevBrasil</div>
-          <h1>Transformamos a viabilidade de construir produtos em um caminho mais simples para sua empresa.</h1>
+          <h1>Construir um novo produto nao precisa comecar no escuro.</h1>
           <p className={styles.heroCopy}>
-            Nosso objetivo e facilitar a entrada de empresas que querem tirar uma ideia do
-            papel, seja com um cadastro rapido ou com um material mais completo para uma
-            primeira abordagem com mais contexto.
+            A 4DevBrasil ajuda sua empresa a sair da intencao para uma avaliacao mais
+            objetiva do produto. Voce pode iniciar com um cadastro basico e deixar nosso
+            time conduzir o primeiro contato, ou compartilhar um material mais completo para
+            que a conversa comece com contexto, viabilidade e direcao.
           </p>
-          <div className={styles.actions}>
-            <Link className={styles.primaryAction} href="#cadastro-rapido">
-              Cadastrar empresa
-            </Link>
-            <Link className={styles.secondaryAction} href="#briefing-completo">
-              Enviar material completo
-            </Link>
-          </div>
           <ul className={styles.highlightList}>
             {benefits.map((highlight) => (
               <li key={highlight}>{highlight}</li>
@@ -114,16 +105,26 @@ export default async function Home() {
           </ul>
         </div>
 
-        <aside className={styles.heroPanel} id="acesso">
+        <aside className={styles.heroPanel}>
           <div className={styles.panelGlow} />
-          <div className={styles.loginHeading}>
-            <span>Acesso da plataforma</span>
-            <strong>Crie sua conta ou entre para seguir com a experiencia certa para cada perfil.</strong>
-            <small>
-              Depois do login, redirecionamos automaticamente a pessoa para a area de cliente ou operador.
-            </small>
+          <div className={styles.heroStatement}>
+            <span>Entrada mais inteligente</span>
+            <strong>Comece simples quando ainda estiver estruturando a ideia. Aprofunde quando ja quiser acelerar a proposta.</strong>
+            <p>
+              O fluxo foi desenhado para respeitar o momento da empresa: menos friccao para
+              iniciar, mais profundidade quando o contexto estiver pronto.
+            </p>
           </div>
-          <LoginForm />
+          <div className={styles.heroSideGrid}>
+            <article className={styles.sideCard}>
+              <h3>Cadastro basico</h3>
+              <p>Para empresas que querem apenas deixar os dados principais e receber contato rapido.</p>
+            </article>
+            <article className={styles.sideCard}>
+              <h3>Briefing completo</h3>
+              <p>Para quem ja quer entrar com material, premissas e uma primeira abordagem mais preparada.</p>
+            </article>
+          </div>
         </aside>
       </section>
 
@@ -167,10 +168,10 @@ export default async function Home() {
             </p>
           </div>
           <div className={styles.calloutActions}>
-            <Link className={styles.primaryAction} href="#acesso">
+            <Link className={styles.primaryAction} href="/criar-conta">
               Criar conta
             </Link>
-            <Link className={styles.secondaryAction} href="#acesso">
+            <Link className={styles.secondaryAction} href="/entrar">
               Entrar para enviar briefing
             </Link>
           </div>
