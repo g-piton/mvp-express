@@ -1,0 +1,81 @@
+.form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field span {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.field input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: rgba(7, 16, 30, 0.6);
+  color: var(--foreground);
+  padding: 0.95rem 1rem;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: rgba(57, 208, 255, 0.7);
+  box-shadow: 0 0 0 4px rgba(57, 208, 255, 0.12);
+}
+
+.field small {
+  color: #ff97a5;
+  font-size: 0.8rem;
+}
+
+.footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer p {
+  max-width: 30rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.footer button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.95rem 1.35rem;
+  color: #07101e;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  font-weight: 800;
+}
+
+.success {
+  border: 1px solid rgba(110, 247, 200, 0.3);
+  border-radius: 1rem;
+  background: rgba(110, 247, 200, 0.08);
+  padding: 1rem 1.1rem;
+  color: #c7fce9;
+}
+
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

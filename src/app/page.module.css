@@ -4,10 +4,99 @@
   padding: 2rem 1.5rem 5rem;
 }
 
+.topbar,
 .hero,
 .section {
   width: min(1180px, 100%);
   margin: 0 auto;
+}
+
+.topbar {
+  position: sticky;
+  top: 1rem;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(8, 16, 31, 0.72);
+  padding: 0.8rem 1rem;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: inline-flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.brandMark {
+  display: inline-flex;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 0.95rem;
+  align-items: center;
+  justify-content: center;
+  color: #07101e;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  box-shadow: 0 14px 30px rgba(57, 208, 255, 0.2);
+}
+
+.brandText {
+  display: grid;
+}
+
+.brandText strong {
+  font-size: 1rem;
+}
+
+.brandText small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.nav {
+  display: flex;
+  gap: 1.1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.topbarActions {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.linkAction,
+.primaryMiniAction {
+  display: inline-flex;
+  min-height: 2.85rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 1.1rem;
+  font-weight: 800;
+}
+
+.linkAction {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.primaryMiniAction {
+  color: #07101e;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
 }
 
 .hero {
@@ -15,13 +104,15 @@
   grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
   gap: 1.5rem;
   align-items: stretch;
-  min-height: calc(100vh - 4rem);
+  min-height: calc(100vh - 8rem);
 }
 
 .heroContent,
 .heroPanel,
 .card,
-.archCard {
+.solutionCard,
+.formPanel,
+.calloutPanel {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -50,20 +141,22 @@
 }
 
 .heroContent h1 {
+  max-width: 13ch;
   font-size: clamp(3rem, 7vw, 5.2rem);
   line-height: 0.95;
-  max-width: 12ch;
 }
 
 .heroCopy,
 .sectionHeading h2,
 .card p,
-.archCard p {
+.solutionCard p,
+.calloutPanel p {
   color: var(--muted);
   line-height: 1.7;
 }
 
-.actions {
+.actions,
+.calloutActions {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
@@ -148,12 +241,6 @@
   background: radial-gradient(circle, rgba(57, 208, 255, 0.3), transparent 70%);
 }
 
-.card,
-.archCard {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-}
-
 .section {
   display: grid;
   gap: 1.4rem;
@@ -162,7 +249,7 @@
 .sectionHeading {
   display: grid;
   gap: 0.75rem;
-  max-width: 50rem;
+  max-width: 54rem;
 }
 
 .sectionHeading h2 {
@@ -170,26 +257,50 @@
 }
 
 .cardGrid,
-.archGrid,
+.solutionGrid,
 .roleGrid {
   display: grid;
   gap: 1rem;
 }
 
 .cardGrid,
-.archGrid {
+.solutionGrid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .card,
-.archCard {
+.solutionCard,
+.formPanel,
+.calloutPanel {
   padding: 1.5rem;
 }
 
 .card h3,
-.archCard h3 {
+.solutionCard h3,
+.calloutPanel h3 {
   margin-bottom: 0.9rem;
   font-size: 1.2rem;
+}
+
+.solutionCard {
+  display: grid;
+  gap: 1rem;
+}
+
+.solutionCard span {
+  color: var(--secondary);
+  font-weight: 700;
+}
+
+.formPanel {
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.calloutPanel {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .roleGrid {
@@ -206,14 +317,27 @@
 }
 
 @media (max-width: 980px) {
+  .topbar,
   .hero,
   .cardGrid,
-  .archGrid,
-  .roleGrid {
+  .roleGrid,
+  .solutionGrid {
     grid-template-columns: 1fr;
   }
 
-  .hero {
+  .topbar {
+    border-radius: 1.5rem;
+  }
+
+  .nav,
+  .topbarActions {
+    justify-content: flex-start;
+  }
+
+  .hero,
+  .calloutPanel {
     min-height: auto;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

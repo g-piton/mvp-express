@@ -1,43 +1,61 @@
 import Link from "next/link";
-import { redirectIfAuthenticated } from "@/modules/auth/session";
+
 import { LoginForm } from "@/components/login-form";
+import { QuickIntakeForm } from "@/components/quick-intake-form";
+import { redirectIfAuthenticated } from "@/modules/auth/session";
 
 import styles from "./page.module.css";
 
+const navItems = [
+  { href: "#inicio", label: "Inicio" },
+  { href: "#solucoes", label: "Solucoes" },
+  { href: "#como-funciona", label: "Como funciona" },
+  { href: "#acesso", label: "Acesso" },
+];
+
+const benefits = [
+  "A empresa pode enviar apenas os dados basicos e nosso time assume o contato inicial.",
+  "Tambem oferecemos uma trilha para quem ja tem material e quer acelerar a primeira abordagem.",
+  "Avaliamos a viabilidade do produto com mais clareza, contexto e foco em proposta.",
+];
+
 const processSteps = [
   {
-    title: "1. Contexto estruturado",
+    title: "1. Cadastro rapido",
     description:
-      "O cliente envia empresa, contato e o material mais completo possível sobre o MVP.",
+      "A empresa informa os dados principais do negocio e do responsavel para iniciar o atendimento.",
   },
   {
-    title: "2. Triagem operacional",
+    title: "2. Material completo",
     description:
-      "Nosso time analisa aderência, maturidade da ideia, urgência e informações faltantes.",
+      "Quem quiser pode complementar com um briefing mais robusto para chegarmos na primeira conversa com mais contexto.",
   },
   {
-    title: "3. Proposta orientada a valor",
+    title: "3. Analise e contato",
     description:
-      "A oportunidade sai com responsável, recomendação e base para proposta comercial rápida.",
+      "A 4DevBrasil revisa a oportunidade e retorna com alinhamento, proximos passos e proposta.",
   },
 ];
 
-const highlights = [
-  "Fluxo público de captação com briefing e upload",
-  "Backoffice interno para triagem, prioridade e proposta",
-  "Arquitetura monolítica enxuta para lançar com baixo custo",
+const solutions = [
+  {
+    title: "Cadastrar empresa com dados basicos",
+    description:
+      "Ideal para quem quer um contato rapido e prefere detalhar a necessidade na conversa com nosso time.",
+    cta: "Entrada simples e sem friccao",
+  },
+  {
+    title: "Criar conta e enviar material completo",
+    description:
+      "Ideal para quem ja tem documentos, premissas e quer receber uma primeira abordagem com mais profundidade.",
+    cta: "Conta rapida para liberar o briefing",
+  },
 ];
 
-const teamRoles = [
-  "PM",
-  "PO",
-  "SM",
-  "Arquiteto de Soluções",
-  "Arquiteto de Software",
-  "DevOps",
-  "UX/UI",
-  "QA",
-  "Devs",
+const trustPillars = [
+  "Visao clara para o cliente",
+  "Triagem mais preparada para o operador",
+  "Primeira abordagem com mais contexto",
 ];
 
 export default async function Home() {
@@ -45,24 +63,52 @@ export default async function Home() {
 
   return (
     <main className={styles.page}>
-      <section className={styles.hero}>
+      <header className={styles.topbar}>
+        <Link className={styles.brand} href="#inicio">
+          <span className={styles.brandMark}>4D</span>
+          <span className={styles.brandText}>
+            <strong>4DevBrasil</strong>
+            <small>Produtos digitais com mais clareza desde a entrada</small>
+          </span>
+        </Link>
+
+        <nav className={styles.nav}>
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className={styles.topbarActions}>
+          <Link className={styles.linkAction} href="#acesso">
+            Criar conta
+          </Link>
+          <Link className={styles.primaryMiniAction} href="#acesso">
+            Entrar
+          </Link>
+        </div>
+      </header>
+
+      <section className={styles.hero} id="inicio">
         <div className={styles.heroContent}>
-          <div className={styles.kicker}>Signal Ops for MVP Delivery</div>
-          <h1>Capte projetos de MVP com mais contexto, mais velocidade e menos ruído.</h1>
+          <div className={styles.kicker}>4DevBrasil</div>
+          <h1>Transformamos a viabilidade de construir produtos em um caminho mais simples para sua empresa.</h1>
           <p className={styles.heroCopy}>
-            Uma plataforma para receber briefings completos, organizar a análise interna e
-            acelerar a proposta comercial do seu time.
+            Nosso objetivo e facilitar a entrada de empresas que querem tirar uma ideia do
+            papel, seja com um cadastro rapido ou com um material mais completo para uma
+            primeira abordagem com mais contexto.
           </p>
           <div className={styles.actions}>
-            <Link className={styles.primaryAction} href="#acesso">
-              Entrar e começar
+            <Link className={styles.primaryAction} href="#cadastro-rapido">
+              Cadastrar empresa
             </Link>
-            <Link className={styles.secondaryAction} href="#como-funciona">
-              Ver como funciona
+            <Link className={styles.secondaryAction} href="#briefing-completo">
+              Enviar material completo
             </Link>
           </div>
           <ul className={styles.highlightList}>
-            {highlights.map((highlight) => (
+            {benefits.map((highlight) => (
               <li key={highlight}>{highlight}</li>
             ))}
           </ul>
@@ -71,20 +117,70 @@ export default async function Home() {
         <aside className={styles.heroPanel} id="acesso">
           <div className={styles.panelGlow} />
           <div className={styles.loginHeading}>
-            <span>Acesso inicial</span>
-            <strong>Entradas separadas por perfil para proteger o que cada pessoa vê.</strong>
+            <span>Acesso da plataforma</span>
+            <strong>Crie sua conta ou entre para seguir com a experiencia certa para cada perfil.</strong>
             <small>
-              Cliente acompanha briefing e status. Operador acessa a fila interna e a análise comercial.
+              Depois do login, redirecionamos automaticamente a pessoa para a area de cliente ou operador.
             </small>
           </div>
           <LoginForm />
         </aside>
       </section>
 
+      <section className={styles.section} id="solucoes">
+        <div className={styles.sectionHeading}>
+          <span>Duas entradas</span>
+          <h2>A empresa escolhe o nivel de profundidade ideal para iniciar a conversa.</h2>
+        </div>
+        <div className={styles.solutionGrid}>
+          {solutions.map((solution) => (
+            <article className={styles.solutionCard} key={solution.title}>
+              <h3>{solution.title}</h3>
+              <p>{solution.description}</p>
+              <span>{solution.cta}</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section} id="cadastro-rapido">
+        <div className={styles.sectionHeading}>
+          <span>Cadastro rapido</span>
+          <h2>Se quiser apenas deixar os dados basicos da empresa, fazemos o restante no primeiro contato.</h2>
+        </div>
+        <div className={styles.formPanel}>
+          <QuickIntakeForm />
+        </div>
+      </section>
+
+      <section className={styles.section} id="briefing-completo">
+        <div className={styles.sectionHeading}>
+          <span>Briefing completo</span>
+          <h2>Para enviar um material mais completo, pedimos antes um cadastro rapido com os dados basicos.</h2>
+        </div>
+        <div className={styles.calloutPanel}>
+          <div>
+            <h3>Conta rapida para liberar o envio</h3>
+            <p>
+              Essa etapa protege os dados, organiza o atendimento e garante que nossa equipe
+              faca a analise do briefing com o contato certo e com contexto desde o inicio.
+            </p>
+          </div>
+          <div className={styles.calloutActions}>
+            <Link className={styles.primaryAction} href="#acesso">
+              Criar conta
+            </Link>
+            <Link className={styles.secondaryAction} href="#acesso">
+              Entrar para enviar briefing
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className={styles.section} id="como-funciona">
         <div className={styles.sectionHeading}>
           <span>Como funciona</span>
-          <h2>O produto nasce para validar o funil ponta a ponta na V1.</h2>
+          <h2>Um fluxo direto para transformar interesse em uma conversa mais objetiva sobre o produto.</h2>
         </div>
         <div className={styles.cardGrid}>
           {processSteps.map((step) => (
@@ -98,66 +194,15 @@ export default async function Home() {
 
       <section className={styles.section}>
         <div className={styles.sectionHeading}>
-          <span>Times e papéis</span>
-          <h2>Agentes com responsabilidade clara desde produto até entrega.</h2>
+          <span>Resultado esperado</span>
+          <h2>Mais clareza para o cliente e mais contexto para a operacao desde a primeira entrada.</h2>
         </div>
         <div className={styles.roleGrid}>
-          {teamRoles.map((role) => (
-            <div className={styles.roleChip} key={role}>
-              {role}
+          {trustPillars.map((item) => (
+            <div className={styles.roleChip} key={item}>
+              {item}
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <div className={styles.sectionHeading}>
-          <span>Arquitetura inicial</span>
-          <h2>Monólito modular em Next.js + React + Postgres para lançar com baixo custo.</h2>
-        </div>
-        <div className={styles.archGrid}>
-          <article className={styles.archCard}>
-            <h3>Camadas</h3>
-            <p>UI, Application, Domain e Infrastructure separadas por módulos.</p>
-          </article>
-          <article className={styles.archCard}>
-            <h3>Módulos</h3>
-            <p>Captação, Briefings, Leads, Dashboard, Auth, Users e Auditoria.</p>
-          </article>
-          <article className={styles.archCard}>
-            <h3>Stack</h3>
-            <p>Next.js 16, React 19, Prisma, Postgres, Zod e React Hook Form.</p>
-          </article>
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <div className={styles.sectionHeading}>
-          <span>Experiências distintas</span>
-          <h2>O mesmo produto, mas com visão certa para cliente e operação.</h2>
-        </div>
-        <div className={styles.cardGrid}>
-          <article className={styles.card}>
-            <h3>Visão do cliente</h3>
-            <p>
-              Envio do briefing, acompanhamento do status da análise, próximos passos e
-              checklist do que ainda precisa ser enviado.
-            </p>
-          </article>
-          <article className={styles.card}>
-            <h3>Visão do operador</h3>
-            <p>
-              Triagem, prioridade, responsável, leitura do briefing, notas internas e
-              preparação da proposta.
-            </p>
-          </article>
-          <article className={styles.card}>
-            <h3>Segurança funcional</h3>
-            <p>
-              Cada perfil entra em uma área diferente e vê apenas o fluxo que precisa para
-              avançar sem ruído.
-            </p>
-          </article>
         </div>
       </section>
     </main>
