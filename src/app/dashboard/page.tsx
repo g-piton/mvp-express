@@ -1,29 +1,40 @@
-import { mockLeads } from "@/modules/dashboard/data/mock-leads";
-import { requireRole } from "@/modules/auth/session";
 import { LogoutButton } from "@/components/logout-button";
+import { requireRole } from "@/modules/auth/session";
+import { getDashboardData } from "@/modules/leads/server";
 
 import styles from "./page.module.css";
 
-const summary = [
-  { label: "Recebidos hoje", value: "12" },
-  { label: "Em análise", value: "28" },
-  { label: "Prontos para proposta", value: "9" },
-  { label: "SLA crítico", value: "3" },
-];
+const statusLabels: Record<string, string> = {
+  RECEIVED: "Recebido",
+  IN_REVIEW: "Em analise",
+  WAITING_FOR_CLIENT: "Aguardando cliente",
+  READY_FOR_PROPOSAL: "Pronto para proposta",
+  PROPOSAL_SENT: "Proposta enviada",
+  WON: "Ganho",
+  LOST: "Perdido",
+};
+
+const priorityLabels: Record<string, string> = {
+  LOW: "Baixa",
+  MEDIUM: "Media",
+  HIGH: "Alta",
+  URGENT: "Urgente",
+};
 
 export default async function DashboardPage() {
   const session = await requireRole("operator");
+  const { summary, leads } = await getDashboardData();
 
   return (
     <main className={styles.page}>
       <header className={styles.header}>
         <div>
           <span>Backoffice interno</span>
-          <h1>Triagem de leads, priorização e gestão comercial em um só fluxo.</h1>
+          <h1>Triagem de leads, priorizacao e gestao comercial em um so fluxo.</h1>
         </div>
         <div className={styles.headerMeta}>
           <strong>{session.name}</strong>
-          <p>{session.email} · Operador com visão interna de pipeline e proposta.</p>
+          <p>{session.email} · Operador com visao interna de pipeline e proposta.</p>
           <LogoutButton />
         </div>
       </header>
@@ -41,11 +52,11 @@ export default async function DashboardPage() {
         <div className={styles.boardHeader}>
           <div>
             <h2>Fila de oportunidades</h2>
-            <p>Mock inicial para orientar a implementação da área autenticada.</p>
+            <p>Leads reais captados pela plataforma, ordenados pelas atualizacoes mais recentes.</p>
           </div>
           <div className={styles.filters}>
             <span>Status: Todos</span>
-            <span>Responsável: Qualquer</span>
+            <span>Responsavel: Qualquer</span>
             <span>Prioridade: Todas</span>
           </div>
         </div>
@@ -60,23 +71,23 @@ export default async function DashboardPage() {
                 <th>Segmento</th>
                 <th>Status</th>
                 <th>Prioridade</th>
-                <th>Responsável</th>
-                <th>Atualização</th>
+                <th>Responsavel</th>
+                <th>Atualizacao</th>
               </tr>
             </thead>
             <tbody>
-              {mockLeads.map((lead) => (
+              {leads.map((lead) => (
                 <tr key={lead.id}>
-                  <td>{lead.id}</td>
-                  <td>{lead.company}</td>
-                  <td>{lead.contact}</td>
-                  <td>{lead.segment}</td>
+                  <td>{lead.id.slice(0, 8).toUpperCase()}</td>
+                  <td>{lead.company.tradeName ?? lead.company.legalName}</td>
+                  <td>{lead.primaryContact.name}</td>
+                  <td>{lead.company.segment ?? "-"}</td>
                   <td>
-                    <span className={styles.status}>{lead.status}</span>
+                    <span className={styles.status}>{statusLabels[lead.status]}</span>
                   </td>
-                  <td>{lead.priority}</td>
-                  <td>{lead.owner}</td>
-                  <td>{lead.updatedAt}</td>
+                  <td>{priorityLabels[lead.priority]}</td>
+                  <td>{lead.assignedTo?.name ?? "Nao atribuido"}</td>
+                  <td>{new Intl.DateTimeFormat("pt-BR").format(lead.updatedAt)}</td>
                 </tr>
               ))}
             </tbody>

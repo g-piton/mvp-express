@@ -62,29 +62,31 @@ export default async function Home() {
   return (
     <main className={styles.page}>
       <header className={styles.topbar}>
-        <Link className={styles.brand} href="#inicio">
-          <span className={styles.brandMark}>4D</span>
-          <span className={styles.brandText}>
-            <strong>4DevBrasil</strong>
-            <small>Produtos digitais com mais clareza desde a entrada</small>
-          </span>
-        </Link>
+        <div className={styles.topbarInner}>
+          <Link className={styles.brand} href="#inicio">
+            <span className={styles.brandMark}>4D</span>
+            <span className={styles.brandText}>
+              <strong>4DevBrasil</strong>
+              <small>Produtos digitais com mais clareza desde a entrada</small>
+            </span>
+          </Link>
 
-        <nav className={styles.nav}>
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              {item.label}
+          <nav className={styles.nav}>
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className={styles.topbarActions}>
+            <Link className={styles.linkAction} href="/criar-conta">
+              Criar conta
             </Link>
-          ))}
-        </nav>
-
-        <div className={styles.topbarActions}>
-          <Link className={styles.linkAction} href="/criar-conta">
-            Criar conta
-          </Link>
-          <Link className={styles.primaryMiniAction} href="/entrar">
-            Entrar
-          </Link>
+            <Link className={styles.primaryMiniAction} href="/entrar">
+              Entrar
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -104,28 +106,6 @@ export default async function Home() {
             ))}
           </ul>
         </div>
-
-        <aside className={styles.heroPanel}>
-          <div className={styles.panelGlow} />
-          <div className={styles.heroStatement}>
-            <span>Entrada mais inteligente</span>
-            <strong>Comece simples quando ainda estiver estruturando a ideia. Aprofunde quando ja quiser acelerar a proposta.</strong>
-            <p>
-              O fluxo foi desenhado para respeitar o momento da empresa: menos friccao para
-              iniciar, mais profundidade quando o contexto estiver pronto.
-            </p>
-          </div>
-          <div className={styles.heroSideGrid}>
-            <article className={styles.sideCard}>
-              <h3>Cadastro basico</h3>
-              <p>Para empresas que querem apenas deixar os dados principais e receber contato rapido.</p>
-            </article>
-            <article className={styles.sideCard}>
-              <h3>Briefing completo</h3>
-              <p>Para quem ja quer entrar com material, premissas e uma primeira abordagem mais preparada.</p>
-            </article>
-          </div>
-        </aside>
       </section>
 
       <section className={styles.section} id="solucoes">

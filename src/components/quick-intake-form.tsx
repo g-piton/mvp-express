@@ -2,26 +2,24 @@
 
 import type { ReactNode } from "react";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+
+import {
+  type QuickIntakeInput,
+  quickIntakeSchema,
+} from "@/modules/intake/schemas/quick-intake";
 
 import styles from "./quick-intake-form.module.css";
 
-const quickIntakeSchema = z.object({
-  companyName: z.string().min(2, "Informe o nome da empresa."),
-  contactName: z.string().min(2, "Informe seu nome."),
-  email: z.string().email("Informe um e-mail valido."),
-  phone: z.string().min(8, "Informe um telefone para contato."),
-});
-
-type QuickIntakeInput = z.infer<typeof quickIntakeSchema>;
-
 export function QuickIntakeForm() {
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
   const {
     register,
+    reset,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<QuickIntakeInput>({
     resolver: zodResolver(quickIntakeSchema),
     defaultValues: {
@@ -32,8 +30,26 @@ export function QuickIntakeForm() {
     },
   });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+  const onSubmit = async (data: QuickIntakeInput) => {
+    setServerMessage(null);
+
+    const response = await fetch("/api/quick-intake", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const payload = (await response.json()) as { error?: string };
+
+    if (!response.ok) {
+      setServerMessage(payload.error ?? "Nao foi possivel registrar sua empresa.");
+      return;
+    }
+
+    reset();
+    setServerMessage("Cadastro recebido. Nossa equipe vai entrar em contato com os proximos passos.");
   };
 
   return (
@@ -60,12 +76,7 @@ export function QuickIntakeForm() {
         </button>
       </div>
 
-      {isSubmitSuccessful ? (
-        <div className={styles.success}>
-          Cadastro validado. O proximo passo e conectar este fluxo a uma Server Action para
-          criar o lead basico e iniciar o contato comercial.
-        </div>
-      ) : null}
+      {serverMessage ? <div className={styles.success}>{serverMessage}</div> : null}
     </form>
   );
 }

@@ -10,10 +10,10 @@ import styles from "./login-form.module.css";
 
 const demoUsers = {
   client: {
-    email: "cliente@demo.com",
-    password: "demo123",
+    email: "",
+    password: "",
     label: "Cliente",
-    subtitle: "Acompanha o briefing, status e próximos passos.",
+    subtitle: "Acompanha o briefing, status e proximos passos.",
   },
   operator: {
     email: "operador@demo.com",
@@ -30,7 +30,7 @@ export function LoginForm() {
   const activeDemoUser = demoUsers[role];
 
   return (
-    <form className={styles.form} action={formAction}>
+    <form key={role} className={styles.form} action={formAction}>
       <div className={styles.roleSwitch}>
         {(["client", "operator"] as const).map((item) => {
           const active = role === item;
@@ -67,9 +67,11 @@ export function LoginForm() {
       </div>
 
       <div className={styles.demoCard}>
-        <span>Acesso de demonstração</span>
+        <span>Acesso de demonstracao</span>
         <strong>
-          {activeDemoUser.email} / {activeDemoUser.password}
+          {role === "operator"
+            ? `${activeDemoUser.email} / ${activeDemoUser.password}`
+            : "Use o e-mail e a senha da conta criada"}
         </strong>
       </div>
 

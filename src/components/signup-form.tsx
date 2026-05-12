@@ -2,27 +2,25 @@
 
 import type { ReactNode } from "react";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+
+import {
+  type SignupInput,
+  signupSchema,
+} from "@/modules/auth/schemas/signup";
 
 import styles from "./signup-form.module.css";
 
-const signupSchema = z.object({
-  fullName: z.string().min(2, "Informe seu nome completo."),
-  companyName: z.string().min(2, "Informe o nome da empresa."),
-  email: z.string().email("Informe um e-mail valido."),
-  phone: z.string().min(8, "Informe um telefone para contato."),
-  password: z.string().min(6, "A senha precisa ter ao menos 6 caracteres."),
-});
-
-type SignupInput = z.infer<typeof signupSchema>;
-
 export function SignupForm() {
+  const router = useRouter();
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<SignupInput>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -34,8 +32,26 @@ export function SignupForm() {
     },
   });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+  const onSubmit = async (data: SignupInput) => {
+    setServerMessage(null);
+
+    const response = await fetch("/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const payload = (await response.json()) as { error?: string };
+
+    if (!response.ok) {
+      setServerMessage(payload.error ?? "Nao foi possivel criar a conta.");
+      return;
+    }
+
+    router.push("/workspace");
+    router.refresh();
   };
 
   return (
@@ -66,12 +82,7 @@ export function SignupForm() {
         </button>
       </div>
 
-      {isSubmitSuccessful ? (
-        <div className={styles.success}>
-          Conta validada. O proximo passo e ligar este cadastro ao banco e iniciar a sessao
-          automaticamente.
-        </div>
-      ) : null}
+      {serverMessage ? <div className={styles.success}>{serverMessage}</div> : null}
     </form>
   );
 }

@@ -33,7 +33,7 @@ export async function getSession() {
   try {
     const session = JSON.parse(raw) as SessionUser;
 
-    if (!session.email || !session.name || !session.role) {
+    if (!session.id || !session.email || !session.name || !session.role) {
       return null;
     }
 

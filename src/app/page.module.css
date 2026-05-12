@@ -1,35 +1,34 @@
 .page {
   display: grid;
   gap: 4rem;
-  padding: 7.5rem 1.5rem 5rem;
-}
-
-.hero,
-.section {
-  width: min(1180px, 100%);
-  margin: 0 auto;
+  padding: 0 0 5rem;
 }
 
 .topbar {
   position: fixed;
-  inset: 1rem 1.5rem auto;
-  width: min(1180px, calc(100% - 3rem));
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 30;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 16, 31, 0.92);
+  backdrop-filter: blur(18px);
 }
 
-.topbar {
+.topbarInner,
+.hero,
+.section {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  scroll-margin-top: 6.5rem;
+}
+
+.topbarInner {
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 1.25rem;
   align-items: center;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(8, 16, 31, 0.72);
-  padding: 0.8rem 1rem;
-  box-shadow: var(--card-shadow);
-  backdrop-filter: blur(18px);
+  padding: 0.9rem 1.5rem;
 }
 
 .brand {
@@ -106,14 +105,13 @@
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
+  grid-template-columns: 1fr;
   gap: 1.5rem;
-  align-items: stretch;
-  min-height: calc(100vh - 8rem);
+  min-height: calc(100vh - 5rem);
+  padding: 7.5rem 1.5rem 0;
 }
 
 .heroContent,
-.heroPanel,
 .card,
 .solutionCard,
 .formPanel,
@@ -152,7 +150,6 @@
 }
 
 .heroCopy,
-.heroStatement p,
 .sectionHeading h2,
 .card p,
 .solutionCard p,
@@ -212,53 +209,10 @@
   background: linear-gradient(135deg, var(--primary), var(--secondary));
 }
 
-.heroPanel {
-  display: grid;
-  gap: 1rem;
-  padding: 1.4rem;
-}
-
-.heroStatement,
-.sideCard {
-  display: grid;
-  gap: 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 1.25rem;
-}
-
-.heroStatement span {
-  color: var(--muted);
-}
-
-.heroStatement strong {
-  font-size: 1.2rem;
-  line-height: 1.45;
-}
-
-.heroSideGrid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.sideCard h3 {
-  font-size: 1.05rem;
-}
-
-.panelGlow {
-  position: absolute;
-  inset: auto -10% -15% auto;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(57, 208, 255, 0.3), transparent 70%);
-}
-
 .section {
   display: grid;
   gap: 1.4rem;
+  padding: 0 1.5rem;
 }
 
 .sectionHeading {
@@ -332,7 +286,6 @@
 }
 
 @media (max-width: 980px) {
-  .topbar,
   .hero,
   .cardGrid,
   .roleGrid,
@@ -340,13 +293,14 @@
     grid-template-columns: 1fr;
   }
 
-  .topbar {
-    border-radius: 1.5rem;
-  }
-
   .nav,
   .topbarActions {
     justify-content: flex-start;
+  }
+
+  .topbarInner,
+  .calloutPanel {
+    grid-template-columns: 1fr;
   }
 
   .hero,
@@ -354,9 +308,5 @@
     min-height: auto;
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .heroSideGrid {
-    grid-template-columns: 1fr;
   }
 }

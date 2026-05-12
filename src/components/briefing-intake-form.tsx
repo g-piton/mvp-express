@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -11,24 +12,26 @@ import {
 import styles from "./briefing-intake-form.module.css";
 
 const budgetOptions = [
-  "Até US$ 10k",
+  "Ate US$ 10k",
   "US$ 10k a US$ 25k",
   "US$ 25k a US$ 50k",
   "Acima de US$ 50k",
 ];
 
 const timelineOptions = [
-  "Até 30 dias",
+  "Ate 30 dias",
   "30 a 60 dias",
   "60 a 90 dias",
   "Mais de 90 dias",
 ];
 
 export function BriefingIntakeForm() {
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
   const {
     register,
+    reset,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<BriefingIntakeInput>({
     resolver: zodResolver(briefingIntakeSchema),
     defaultValues: {
@@ -48,37 +51,74 @@ export function BriefingIntakeForm() {
     },
   });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 600));
+  const onSubmit = async (data: BriefingIntakeInput) => {
+    setServerMessage(null);
+
+    const payload = new FormData();
+    payload.set("companyName", data.companyName);
+    payload.set("contactName", data.contactName);
+    payload.set("email", data.email);
+    payload.set("phone", data.phone);
+    payload.set("role", data.role);
+    payload.set("website", data.website ?? "");
+    payload.set("segment", data.segment);
+    payload.set("challenge", data.challenge);
+    payload.set("goal", data.goal);
+    payload.set("budget", data.budget);
+    payload.set("timeline", data.timeline);
+    payload.set("needsNda", String(data.needsNda));
+    payload.set("consent", String(data.consent));
+
+    const fileInput = document.querySelector<HTMLInputElement>('input[name="briefingFile"]');
+    const file = fileInput?.files?.[0];
+
+    if (file) {
+      payload.set("briefingFile", file);
+    }
+
+    const response = await fetch("/api/briefing", {
+      method: "POST",
+      body: payload,
+    });
+
+    const body = (await response.json()) as { error?: string };
+
+    if (!response.ok) {
+      setServerMessage(body.error ?? "Nao foi possivel enviar o briefing.");
+      return;
+    }
+
+    reset();
+    setServerMessage("Briefing enviado com sucesso. Nossa equipe vai analisar o material e retornar com os proximos passos.");
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.grid}>
-        <Field label="Empresa" error={errors.companyName?.message}>
+        <Field error={errors.companyName?.message} label="Empresa">
           <input placeholder="Ex.: NovaPay Labs" {...register("companyName")} />
         </Field>
-        <Field label="Contato principal" error={errors.contactName?.message}>
+        <Field error={errors.contactName?.message} label="Contato principal">
           <input placeholder="Seu nome completo" {...register("contactName")} />
         </Field>
-        <Field label="E-mail" error={errors.email?.message}>
+        <Field error={errors.email?.message} label="E-mail">
           <input placeholder="voce@empresa.com" {...register("email")} />
         </Field>
-        <Field label="Telefone / WhatsApp" error={errors.phone?.message}>
+        <Field error={errors.phone?.message} label="Telefone / WhatsApp">
           <input placeholder="+1 555 000 0000" {...register("phone")} />
         </Field>
-        <Field label="Cargo" error={errors.role?.message}>
+        <Field error={errors.role?.message} label="Cargo">
           <input placeholder="Founder, PM, CTO..." {...register("role")} />
         </Field>
         <Field label="Website">
           <input placeholder="https://empresa.com" {...register("website")} />
         </Field>
-        <Field label="Segmento" error={errors.segment?.message}>
+        <Field error={errors.segment?.message} label="Segmento">
           <input placeholder="Fintech, HealthTech..." {...register("segment")} />
         </Field>
-        <Field label="Faixa de investimento" error={errors.budget?.message}>
+        <Field error={errors.budget?.message} label="Faixa de investimento">
           <select defaultValue="" {...register("budget")}>
-            <option value="" disabled>
+            <option disabled value="">
               Selecione
             </option>
             {budgetOptions.map((option) => (
@@ -88,9 +128,9 @@ export function BriefingIntakeForm() {
             ))}
           </select>
         </Field>
-        <Field label="Prazo esperado" error={errors.timeline?.message}>
+        <Field error={errors.timeline?.message} label="Prazo esperado">
           <select defaultValue="" {...register("timeline")}>
-            <option value="" disabled>
+            <option disabled value="">
               Selecione
             </option>
             {timelineOptions.map((option) => (
@@ -103,29 +143,29 @@ export function BriefingIntakeForm() {
       </div>
 
       <Field
-        label="Qual problema ou oportunidade esse MVP precisa validar?"
         error={errors.challenge?.message}
+        label="Qual problema ou oportunidade esse MVP precisa validar?"
       >
         <textarea
+          placeholder="Conte o contexto, quem e o usuario, o que ja foi tentado e onde esta o gargalo."
           rows={5}
-          placeholder="Conte o contexto, quem é o usuário, o que já foi tentado e onde está o gargalo."
           {...register("challenge")}
         />
       </Field>
 
-      <Field label="O que vocês esperam como resultado do MVP?" error={errors.goal?.message}>
+      <Field error={errors.goal?.message} label="O que voces esperam como resultado do MVP?">
         <textarea
+          placeholder="Explique quais hipoteses precisam ser testadas, principais fluxos e indicador de sucesso."
           rows={5}
-          placeholder="Explique quais hipóteses precisam ser testadas, principais fluxos e indicador de sucesso."
           {...register("goal")}
         />
       </Field>
 
       <Field label="Anexo principal">
         <label className={styles.upload}>
-          <input type="file" />
+          <input name="briefingFile" type="file" />
           <span>Arraste o briefing ou clique para anexar</span>
-          <small>PDF, DOCX ou PPTX até 20 MB. Na V1 o upload será integrado ao storage privado.</small>
+          <small>PDF, DOCX ou PPTX ate 20 MB. Nesta versao gravamos os metadados para evoluir o storage na proxima etapa.</small>
         </label>
       </Field>
 
@@ -136,7 +176,7 @@ export function BriefingIntakeForm() {
         </label>
         <label className={styles.checkbox}>
           <input type="checkbox" {...register("consent")} />
-          <span>Autorizo o contato da equipe para análise e proposta comercial</span>
+          <span>Autorizo o contato da equipe para analise e proposta comercial</span>
         </label>
         {errors.consent?.message ? (
           <p className={styles.errorInline}>{errors.consent.message}</p>
@@ -145,20 +185,14 @@ export function BriefingIntakeForm() {
 
       <div className={styles.footer}>
         <p>
-          Leva cerca de 7 minutos. Quanto mais contexto você enviar, mais precisa será
-          a nossa análise.
+          Leva cerca de 7 minutos. Quanto mais contexto voce enviar, mais precisa sera a nossa analise.
         </p>
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Enviando..." : "Enviar para análise"}
+        <button disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Enviando..." : "Enviar para analise"}
         </button>
       </div>
 
-      {isSubmitSuccessful ? (
-        <div className={styles.success}>
-          Briefing validado com sucesso. O próximo passo é ligar este formulário a uma
-          Server Action + upload seguro no bucket privado.
-        </div>
-      ) : null}
+      {serverMessage ? <div className={styles.success}>{serverMessage}</div> : null}
     </form>
   );
 }
